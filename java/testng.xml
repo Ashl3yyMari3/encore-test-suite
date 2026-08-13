@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Encore Test Suite">
+  <test name="Encore Smoke Test">
+    <classes>
+      <class name="com.encore.smoke.SmokeTest"/>
+    </classes>
+  </test>
+  <test name="Event Date Display Test">
+    <classes>
+      <class name="com.encore.smoke.EventDateDisplayTest"/>
+    </classes>
+  </test>
+  <test name="VIP Booking Payment Test">
+    <classes>
+      <class name="com.encore.smoke.VipBookingPaymentTest"/>
+    </classes>
+  </test>
+  <test name="Event List Locator Test">
+    <classes>
+      <class name="com.encore.smoke.EventListLocatorTest"/>
+    </classes>
+  </test>
+</suite>

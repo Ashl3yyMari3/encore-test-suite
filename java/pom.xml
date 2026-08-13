@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.encore.hackathon</groupId>
+  <artifactId>encore-smoke-java</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <testng.version>7.10.2</testng.version>
+    <appium.java.client.version>9.4.0</appium.java.client.version>
+    <selenium.version>4.30.0</selenium.version>
+    <browserstack.java.sdk.version>1.67.2</browserstack.java.sdk.version>
+  </properties>
+
+  <!--
+    Pins every org.seleniumhq.selenium artifact to selenium.version, regardless
+    of which dependency path pulls it in. Without this, io.appium:java-client's
+    own transitive Selenium range dependency ([4.26.0, 5.0)) wins mediation over
+    our pinned selenium-java, resolving to whatever the latest Selenium release
+    is. That breaks the build once Selenium removes an API appium-java-client
+    still compiles against (as happened with org.openqa.selenium.ContextAware /
+    org.openqa.selenium.html5.LocationContext, removed between 4.30.0 and 4.35.0).
+  -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-bom</artifactId>
+        <version>${selenium.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appium</groupId>
+      <artifactId>java-client</artifactId>
+      <version>${appium.java.client.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.browserstack</groupId>
+      <artifactId>browserstack-java-sdk</artifactId>
+      <version>${browserstack.java.sdk.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>sample-test</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.1</version>
+            <configuration>
+              <argLine>
+                -javaagent:"${settings.localRepository}"/com/browserstack/browserstack-java-sdk/${browserstack.java.sdk.version}/browserstack-java-sdk-${browserstack.java.sdk.version}.jar
+              </argLine>
+              <suiteXmlFiles>
+                <suiteXmlFile>testng.xml</suiteXmlFile>
+              </suiteXmlFiles>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

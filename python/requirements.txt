@@ -1,0 +1,4 @@
+browserstack-sdk==1.51.2
+Appium-Python-Client==4.5.0
+selenium==4.27.1
+pytest==8.3.3

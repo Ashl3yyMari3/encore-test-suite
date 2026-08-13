@@ -1,0 +1,11 @@
+userName: YOUR_USERNAME
+accessKey: YOUR_ACCESS_KEY
+framework: testng
+app: YOUR_APP_ID
+platforms:
+  - platformName: Android
+    deviceName: YOUR_DEVICE_NAME
+    platformVersion: YOUR_PLATFORM_VERSION
+browserstackLocal: false
+buildName: Encore Hackathon
+projectName: Encore Hackathon

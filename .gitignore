@@ -1,0 +1,72 @@
+# --- python ---
+python/.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+pip-log.txt
+
+# --- nodejs ---
+nodejs/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+
+# --- java / maven ---
+java/target/
+*.class
+dependency-reduced-pom.xml
+
+# --- app binaries ---
+# app/encore-release.apk is intentionally tracked — it's the frozen build
+# this test suite runs against. Ignore any OTHER build artifacts that show
+# up locally (e.g. a rebuilt/renamed APK, iOS builds) so they don't get
+# committed by accident.
+app/*.apk
+app/*.ipa
+app/*.aab
+!app/encore-release.apk
+
+# --- test run artifacts (BrowserStack SDK / WebdriverIO / Appium) ---
+*.log
+logs/
+python/log/
+allure-results/
+allure-report/
+screenshots/
+.appium/
+
+# --- editors / IDEs ---
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- secrets / local overrides ---
+# browserstack.yml and wdio.conf.js are intentionally tracked WITH
+# placeholder values (YOUR_USERNAME / YOUR_ACCESS_KEY / etc.) as templates —
+# do not add them here. If you fill in real credentials locally to run from
+# the command line, keep that change uncommitted (`git status` before
+# pushing), or use one of the patterns below for a local-only override.
+.env
+.env.*
+*.local.yml
+*.local.js
+credentials.json
+secrets.yml
