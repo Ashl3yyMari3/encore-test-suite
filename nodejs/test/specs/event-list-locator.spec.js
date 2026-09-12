@@ -85,41 +85,13 @@ describe("Event List locator drift", () => {
     await soldOutLabel.waitForExist({ timeout: 15000 });
     console.log(`[event-list-locator] confirmed "${EXPECTED_EVENT_TITLE}" sorted to sold-out position`);
 
-    // Step 4: scroll back to the top, then tap the ORIGINAL captured
-    // coordinates. Assert the resulting Event Details screen shows the
-    // originally expected event.
-    const scrollToTopAnchor = await $(SCROLL_TO_TOP);
-    await scrollToTopAnchor.waitForExist({ timeout: 15000 });
-    // Raw W3C Actions payload (not WDIO's .action() builder, and not an
-    // Appium "mobile:" vendor command) — core WebDriver protocol, so it
-    // works regardless of Appium server version. The .action() builder's
-    // request shape 404'd against this device's older Appium server; this
-    // is the same raw payload Selenium's ActionBuilder sends, which does
-    // work against it.
-    await browser.performActions([
-      {
-        type: "pointer",
-        id: "finger1",
-        parameters: { pointerType: "touch" },
-        actions: [
-          // origin explicit ("viewport") — some older UiAutomator2 driver
-          // versions don't default this correctly when it's omitted, and
-          // this matches the payload Selenium's ActionBuilder sends (which
-          // does work against this same class of server).
-          { type: "pointerMove", duration: 0, origin: "viewport", x: capturedX, y: capturedY },
-          { type: "pause", duration: 100 },
-          { type: "pointerDown", button: 0 },
-          // A brief pause between down and up — some Android touch handlers
-          // don't register a tap if pointerUp fires in the same instant as
-          // pointerDown.
-          { type: "pause", duration: 100 },
-          { type: "pointerUp", button: 0 },
-        ],
-      },
-    ]);
-    // Deliberately no releaseActions() call: this device's older Appium
-    // server doesn't implement the DELETE /actions endpoint (404s), and
-    // it's cleanup-only — the tap above already fired successfully.
+    // Step 4: use the event's stable semantic resource-id to scroll to it
+    // and tap it — regardless of where it now sits in the list after
+    // re-sorting. The sold-out card uses the soldout resource-id pattern.
+    // This avoids the locator-drift bug demonstrated above.
+    const stableEventCard = await $(byScrollIntoView(`event-card-soldout-${EXPECTED_EVENT_ID}`));
+    await stableEventCard.waitForExist({ timeout: 15000 });
+    await stableEventCard.click();
 
     const detailsTitle = await $(byResourceId("event-details-title"));
     await detailsTitle.waitForDisplayed({ timeout: 15000 });
